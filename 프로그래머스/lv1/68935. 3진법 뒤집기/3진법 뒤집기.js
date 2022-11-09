@@ -1,15 +1,9 @@
 function solution(n) {
   const arr = [];
-  const DIVISIOR = 3;
-  while (n > 0) {
-    const remainder = n % DIVISIOR;
-    arr.push(remainder);
-    n = Math.floor(n / DIVISIOR);
+  const RADIX = 3;
+  while (n !== 0) {
+    arr.unshift(n % RADIX);
+    n = Math.floor(n / RADIX);
   }
-
-  let sum = 0;
-  arr.forEach((elem, index) => {
-    sum += elem * Math.pow(DIVISIOR, arr.length - 1 - index);
-  });
-  return sum;
+  return arr.reduce((acc, cur, index) => acc + cur * Math.pow(RADIX, index), 0);
 }
