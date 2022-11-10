@@ -6,7 +6,7 @@ function solution(s, n) {
   return arr.join("");
 }
 function isAlphabet(char) {
-  return /[A-Za-z]/g.test(char);
+  return /[a-z]/ig.test(char);
 }
 function isUpperCase(char) {
   return /[A-Z]/g.test(char);
