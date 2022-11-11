@@ -16,9 +16,7 @@ function solution(ingredient) {
     }
     if (j != ORDER_LENGTH) continue;
 
-    for (let k = 0; k < ORDER_LENGTH; k++) {
-      stack.pop();
-    }
+    stack.splice(-ORDER_LENGTH);
     count++;
   }
   return count;
