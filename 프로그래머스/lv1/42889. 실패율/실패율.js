@@ -1,4 +1,4 @@
-//간단한 버전
+//효율성은 떨어지는 간단한 버전
 function solution(N, stages) {
   const NUMBER = 0;
   const FAILURE_RATE = 1;
