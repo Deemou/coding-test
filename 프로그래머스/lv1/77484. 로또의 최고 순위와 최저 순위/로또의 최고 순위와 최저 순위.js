@@ -8,7 +8,7 @@ function solution(lottos, win_nums) {
     if (win_nums.includes(lottoNumber)) hitCount++;
   });
 
-  const maxCount = Math.min(6, hitCount + unknownCount);
+  const maxCount = hitCount + unknownCount;
 
   return [prize[maxCount], prize[hitCount]];
 }
