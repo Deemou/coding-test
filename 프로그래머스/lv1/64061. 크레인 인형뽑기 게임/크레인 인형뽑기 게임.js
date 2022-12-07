@@ -1,41 +1,40 @@
 function solution(board, moves) {
-  const game = new ClawMachineGame(board);
+  const transposedBoard = transpose(board);
+  const game = new ClawMachineGame(transposedBoard);
   return game.moves(moves);
 }
 
+const transpose = (matrix) =>
+  matrix.reduce((result, row) => row.map((_, i) => [...(result[i] || []), row[i]]), []);
+
 class ClawMachineGame {
-  #board;
+  #lanes;
   #prizes;
   #popCount;
 
   constructor(board) {
-    this.#board = board;
+    this.#lanes = board.map((lane) => lane.reverse().filter((item) => this.isNotEmpty(item)));
     this.#prizes = [];
     this.#popCount = 0;
   }
 
-  moves(lanes) {
-    lanes.forEach((lane) => {
-      this.move(lane - 1);
+  isNotEmpty(item) {
+    return item !== 0;
+  }
+
+  moves(laneNumbers) {
+    laneNumbers.forEach((laneNumber) => {
+      this.move(laneNumber - 1);
     });
     return this.#popCount;
   }
 
-  move(lane) {
-    const board = this.#board;
-    for (let i = 0; i < board.length; i++) {
-      const item = board[i][lane];
-      if (this.isNotEmpty(item)) {
-        this.pileUpPrize(item);
-        this.popContinuousPrizes();
-        this.setItemEmpty(i, lane);
-        break;
-      }
-    }
-  }
+  move(laneNumber) {
+    const item = this.#lanes[laneNumber].pop();
+    if (!item) return;
 
-  isNotEmpty(item) {
-    return item !== 0;
+    this.pileUpPrize(item);
+    this.popContinuousPrizes();
   }
 
   pileUpPrize(prize) {
@@ -44,7 +43,6 @@ class ClawMachineGame {
 
   popContinuousPrizes() {
     const top = this.#prizes.length - 1;
-
     if (this.#prizes[top] !== this.#prizes[top - 1]) return;
 
     for (let i = 0; i < 2; i++) this.popPrize();
@@ -53,9 +51,5 @@ class ClawMachineGame {
   popPrize() {
     this.#prizes.pop();
     this.#popCount++;
-  }
-
-  setItemEmpty(index, lane) {
-    this.#board[index][lane] = 0;
   }
 }
