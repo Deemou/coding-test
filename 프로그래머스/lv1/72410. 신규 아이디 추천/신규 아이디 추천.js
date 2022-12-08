@@ -15,7 +15,7 @@ function replaceAllUppercaseWithLowercase(id) {
 }
 
 function removeAllCharactersExceptLowercaseNumberDashUnderscoreOrDot(id) {
-  const removeRegex = /[^\w-_.]/g;
+  const removeRegex = /[^\w-.]/g;
   return id.replace(removeRegex, '');
 }
 
