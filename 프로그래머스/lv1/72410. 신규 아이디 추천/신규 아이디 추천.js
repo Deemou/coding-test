@@ -11,31 +11,28 @@ function solution(new_id) {
 }
 
 function replaceAllUppercaseWithLowercase(id) {
-  const uppercaseRegex = /[A-Z]/g;
-  return id.replace(uppercaseRegex, (match) => match.toLowerCase());
+  return id.toLowerCase();
 }
 
 function removeAllCharactersExceptLowercaseNumberDashUnderscoreOrDot(id) {
-  const reserveRegex = /[a-z]|[0-9]|\-|\_|\./g;
-  return id.match(reserveRegex).join('');
+  const removeRegex = /[^\w-_.]/g;
+  return id.replace(removeRegex, '');
 }
 
 function replaceConsecutiveDotsWithOneDot(id) {
-  const dotRegex = /\.{1,}/g;
+  const dotRegex = /\.+/g;
   return id.replace(dotRegex, '.');
 }
 
 function removeDotsLocatedAtTheBeginningAndTheEnd(id) {
-  const startIndex = id.startsWith('.') ? 1 : 0;
-  const endIndex = id.endsWith('.') ? id.length - 1 : id.length;
-  return id.slice(startIndex, endIndex);
+  const dotRegex = /^\.|\.$/g;
+  return id.replace(dotRegex, '');
 }
 
 function addDefaultCharacterIfIdIsEmpty(id) {
-  if (id.length > 0) return id;
-
   const char = 'a';
-  return char;
+  const emptyRegex = /^$/;
+  return id.replace(emptyRegex, char);
 }
 
 function removeAllCharactersExceptTheFirstFifteen(id) {
@@ -49,6 +46,3 @@ function repeatLastCharacterUntilLengthOfIdIsEqualOrMoreThanThree(id) {
   if (len >= minLimit) return id;
   return id + id[len - 1].repeat(minLimit - len);
 }
-
-const recommendationID = '=.=';
-solution(recommendationID);
