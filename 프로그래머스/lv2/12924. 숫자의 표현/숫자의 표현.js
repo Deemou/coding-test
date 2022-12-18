@@ -3,11 +3,10 @@ function solution(n) {
     let numberOfContiniousNumbers=1;
     let answer = 0;
     while(rest>0){
-        if(rest%numberOfContiniousNumbers===0){
-            answer+=1;
-        }
+        if(rest%numberOfContiniousNumbers===0)
+            answer++
         rest-=numberOfContiniousNumbers
-        numberOfContiniousNumbers+=1
+        numberOfContiniousNumbers++
     }
     return answer;
 }
