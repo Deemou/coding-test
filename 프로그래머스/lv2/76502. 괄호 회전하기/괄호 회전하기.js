@@ -1,20 +1,29 @@
 function solution(s) {
+  if (s.length % 2 === 1) return 0;
+
   let answer = 0;
-  const open = ['(', '{', '['];
-  const close = [')', '}', ']'];
+  const openBrackets = ['(', '{', '['];
+  const closeOpenPair = { ')': '(', '}': '{', ']': '[' };
+
   for (let i = 0; i < s.length; i++) {
-    const temp = s.slice(i, s.length) + s.slice(0, i);
     const stack = [];
-    let j = 0;
-    for (j; j < temp.length; j++) {
-      const bracket = temp[j];
-      if (open.includes(bracket)) stack.push(bracket);
-      else if (close.includes(bracket)) {
-        const top = stack.pop();
-        if (close.indexOf(bracket) !== open.indexOf(top)) break;
-      } else break;
+    const rotate = s.slice(i) + s.slice(0, i);
+    let isCorrectBracketString = true;
+
+    for (let j = 0; j < s.length; j++) {
+      const bracket = rotate[j];
+      if (openBrackets.includes(bracket)) stack.push(bracket);
+      else {
+        const lastBracket = stack.pop();
+        if (lastBracket !== closeOpenPair[bracket]) {
+          isCorrectBracketString = false;
+          break;
+        }
+      }
     }
-    if (j === temp.length && stack.length === 0) answer++;
+
+    if (isCorrectBracketString) answer++;
   }
+
   return answer;
 }
