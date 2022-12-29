@@ -1,13 +1,12 @@
 function solution(w, h) {
   if (w === h) return w * h - w;
 
-  let answer = 0;
+  const slope = h / w;
+  let result = 0;
 
-  for (let i = 1; i < w; i++) {
-    const n = Math.floor((h * i) / w);
-    answer += n;
+  for (let i = 1; i <= w; i++) {
+    result += Math.ceil(slope * i);
   }
-  answer *= 2;
 
-  return answer;
+  return (w * h - result) * 2;
 }
