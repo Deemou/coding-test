@@ -1,13 +1,10 @@
 function solution(numbers) {
   const answer = numbers
+    .map((v) => v + '')
     .sort((a, b) => {
-      const A = a.toString();
-      const B = b.toString();
-      if (A + B >= B + A) return -1;
-      return 1;
+      return (b + a) - (a + b);
     })
     .join('');
 
-  if (answer[0] === '0') return '0';
-  return answer;
+  return answer[0] === '0' ? '0' : answer;
 }
