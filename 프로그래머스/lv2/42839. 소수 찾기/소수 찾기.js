@@ -1,6 +1,6 @@
 function solution(numbers) {
   let arr = [];
-  const numArr = numbers.split('').map((v) => Number(v));
+  const numArr = numbers.split('');
 
   for (let i = 1; i <= numbers.length; i++) {
     const permutations = getPermutations(numArr, i);
