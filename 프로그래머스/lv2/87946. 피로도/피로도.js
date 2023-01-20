@@ -1,38 +1,14 @@
 function solution(k, dungeons) {
-  let answer = -1;
-  const length = dungeons.length;
-  const arr = [];
+  let answer = 0;
+  const filtered = dungeons.slice().filter((v) => v[0] <= k);
 
-  for (let i = 0; i < length; i++) {
-    arr.push(i.toString());
+  for (let i = 0; i < filtered.length; i++) {
+    const subAnswer = solution(
+      k - filtered[i][1],
+      filtered.filter((_, idx) => i !== idx)
+    );
+    if (subAnswer + 1 > answer) answer = subAnswer + 1;
+    if (answer >= dungeons.length) return answer;
   }
-
-  const permutations = getPermutations(arr, length);
-  permutations.forEach((permutation) => {
-    let count = 0;
-    let energy = k;
-    for (let i = 0; i < permutation.length; i++) {
-      const order = permutation[i];
-      const [minimum, used] = dungeons[order];
-      if (energy < minimum) break;
-      count++;
-      energy -= used;
-    }
-    answer = Math.max(answer, count);
-  });
   return answer;
-}
-
-function getPermutations(numbers, length) {
-  if (length === 1) return numbers;
-
-  const arr = [];
-
-  numbers.forEach((fixed, idx) => {
-    const rest = numbers.filter((_, index) => index !== idx);
-    const permutations = getPermutations(rest, length - 1);
-    const arranged = permutations.map((v) => [fixed, v].join(''));
-    arr.push(...arranged);
-  });
-  return arr;
 }
