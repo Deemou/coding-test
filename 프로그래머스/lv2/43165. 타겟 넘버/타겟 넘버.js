@@ -1,14 +1,14 @@
 function solution(numbers, target) {
   let answer = 0;
-  getAnswer(0, 0);
-  function getAnswer(x, value) {
-    if (x < numbers.length) {
-      getAnswer(x + 1, value + numbers[x]);
-      getAnswer(x + 1, value - numbers[x]);
-    } else {
-      if (value === target) {
-        answer++;
-      }
+  dfs(0, 0);
+
+  function dfs(idx, val) {
+    if (idx < numbers.length) {
+      dfs(idx + 1, val + numbers[idx]);
+      dfs(idx + 1, val - numbers[idx]);
+    }
+    if (idx === numbers.length && val === target) {
+      answer++;
     }
   }
   return answer;
