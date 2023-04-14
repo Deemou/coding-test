@@ -1,10 +1,10 @@
 # [level 2] 멀쩡한 사각형 - 62048 
 
-[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/62048#) 
+[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/62048) 
 
 ### 성능 요약
 
-메모리: 33.5 MB, 시간: 0.04 ms
+메모리: 33.5 MB, 시간: 0.03 ms
 
 ### 구분
 
@@ -12,7 +12,7 @@
 
 ### 채점결과
 
-<br/>정확성: 100.0<br/>합계: 100.0 / 100.0
+Empty
 
 ### 문제 설명
 
@@ -45,7 +45,7 @@
 <p>입출력 예 #1<br>
 가로가 8, 세로가 12인 직사각형을 대각선 방향으로 자르면 총 16개 정사각형을 사용할 수 없게 됩니다. 원래 직사각형에서는 96개의 정사각형을 만들 수 있었으므로, 96 - 16 = 80 을 반환합니다.</p>
 
-<p><img src="https://grepp-programmers.s3.amazonaws.com/files/production/ee895b2cd9/567420db-20f4-4064-afc3-af54c4a46016.png" title="" alt="572957326.92.png"></p>
+<p><img src="https://grepp-programmers.s3.amazonaws.com/files/production/ee895b2cd9/567420db-20f4-4064-afc3-af54c4a46016.png" title="" alt="572957326.92.png" style=""></p>
 
 
 > 출처: 프로그래머스 코딩 테스트 연습, https://programmers.co.kr/learn/challenges
