@@ -1,14 +1,16 @@
 function solution(numbers) {
-  let arr = [];
+  const arr = [];
   const numArr = numbers.split('');
 
   for (let i = 1; i <= numbers.length; i++) {
     const permutations = getPermutations(numArr, i);
-    arr = arr.concat(permutations.map((v) => Number(v)).filter((v) => isPrime(v)));
+    for (let num of permutations) {
+      const n = Number(num);
+      if (isPrime(n)) arr.push(n);
+    }
   }
 
-  const set = new Set([...arr]);
-  return set.size;
+  return new Set([...arr]).size;
 }
 
 function getPermutations(numbers, length) {
@@ -18,7 +20,7 @@ function getPermutations(numbers, length) {
   numbers.forEach((fixed, idx) => {
     const rest = numbers.filter((_, index) => idx !== index);
     const permutations = getPermutations(rest, length - 1);
-    const arranged = permutations.map((v) => [fixed, v].join(''));
+    const arranged = permutations.map((v) => fixed + v);
     arr.push(...arranged);
   });
   return arr;
