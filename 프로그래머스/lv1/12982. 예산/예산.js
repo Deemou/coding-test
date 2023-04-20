@@ -1,9 +1,9 @@
 function solution(d, budget) {
+  const sorted = d.slice().sort((a, b) => a - b);
   let cnt = 0;
-  d.sort((a, b) => a - b);
-  for (const cost of d) {
-    budget -= cost;
-    if (budget < 0) break;
+  for (let price of sorted) {
+    budget -= price;
+    if (budget < 0) return cnt;
     cnt++;
   }
   return cnt;
