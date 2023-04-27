@@ -4,7 +4,7 @@
 
 ### 성능 요약
 
-메모리: 42 MB, 시간: 9.47 ms
+메모리: 41.9 MB, 시간: 10.17 ms
 
 ### 구분
 
@@ -17,8 +17,10 @@ Empty
 ### 문제 설명
 
 <p>N개의 스티커가 원형으로 연결되어 있습니다. 다음 그림은 N = 8인 경우의 예시입니다.<br>
-<img src="https://grepp-programmers.s3.ap-northeast-2.amazonaws.com/files/production/d8d3a8b3-606c-4fb6-baf2-3a96cb53d70c/%E1%84%89%E1%85%B3%E1%84%90%E1%85%B5%E1%84%8F%E1%85%A5_hb1jty.jpg" title="" alt="스티커_hb1jty.jpg"><br>
-원형으로 연결된 스티커에서 몇 장의 스티커를 뜯어내어 뜯어낸 스티커에 적힌 숫자의 합이 최대가 되도록 하고 싶습니다. 단 스티커 한 장을 뜯어내면 양쪽으로 인접해있는 스티커는 찢어져서 사용할 수 없게 됩니다. </p>
+<img src="https://grepp-programmers.s3.ap-northeast-2.amazonaws.com/files/production/d8d3a8b3-606c-4fb6-baf2-3a96cb53d70c/%E1%84%89%E1%85%B3%E1%84%90%E1%85%B5%E1%84%8F%E1%85%A5_hb1jty.jpg" title="" alt="스티커_hb1jty.jpg" style=""><br>
+원형으로 연결된 스티커에서 몇 장의 스티커를 뜯어내어 뜯어낸 스티커에 적힌 숫자의 합이 최대가 되도록 하고 싶습니다. 단 스티커 한 장을 뜯어내면 양쪽으로 인접해있는 스티커는 찢어져서 사용할 수 없게 됩니다. <div class="ocr_text_div" style="position: absolute; opacity: 0.7; z-index: 100000; pointer-events: auto; font-size: 1.5rem; overflow: hidden; border: 2px solid cornflowerblue !important; color: rgba(0, 0, 0, 0) !important; background-color: rgba(0, 0, 0, 0) !important; left: 225px; top: 277px; width: 30px; height: 23px;">エ
+
+</div></p>
 
 <p>예를 들어 위 그림에서 14가 적힌 스티커를 뜯으면 인접해있는 10, 6이 적힌 스티커는 사용할 수 없습니다. 스티커에 적힌 숫자가 배열 형태로 주어질 때, 스티커를 뜯어내어 얻을 수 있는 숫자의 합의 최댓값을 return 하는 solution 함수를 완성해 주세요. 원형의 스티커 모양을 위해 배열의 첫 번째 원소와 마지막 원소가 서로 연결되어 있다고 간주합니다.</p>
 
