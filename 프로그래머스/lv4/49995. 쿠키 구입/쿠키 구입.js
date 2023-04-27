@@ -8,13 +8,12 @@ function solution(cookie) {
 
   for (let i = 1; i < cookie.length; i++) {
     let l = i - 1,
-      r = i;
-    let sum1 = cookie[l],
+      r = i,
+      sum1 = cookie[l],
       sum2 = cookie[r];
-    let pAns = 0;
     while (true) {
       if (sum1 === sum2) {
-        pAns = sum1;
+        ans = Math.max(ans, sum1);
         r++;
         l--;
         if (l < 0 || r === cookie.length) break;
@@ -30,8 +29,7 @@ function solution(cookie) {
         sum1 += cookie[l];
       }
     }
-    if (pAns === max) return max;
-    ans = Math.max(ans, pAns);
+    if (ans === max) return max;
   }
   return ans;
 }
