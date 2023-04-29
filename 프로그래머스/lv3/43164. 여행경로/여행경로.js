@@ -1,30 +1,24 @@
 function solution(tickets) {
-  const answer = [];
-  const start = 'ICN';
-  const initPath = [start];
+  const ans = [];
+  const N = tickets.length;
+  const visits = Array(N).fill(false);
 
-  function dfs(location, leftTickets, path) {
-    if (leftTickets.length === 0) {
-      answer.push(path);
+  dfs('ICN', ['ICN'], 0);
+
+  function dfs(start, path, cnt) {
+    if (cnt === N) {
+      ans.push(path);
       return;
     }
 
-    for (let i = 0; i < leftTickets.length; i++) {
-      const [from, to] = leftTickets[i];
-      if (from !== location) continue;
-
-      const left = leftTickets.filter((_, idx) => i !== idx);
-      const newPath = [...path, to];
-
-      dfs(to, left, newPath);
+    for (let i = 0; i < N; i++) {
+      const [from, to] = tickets[i];
+      if (from !== start || visits[i]) continue;
+      visits[i] = true;
+      dfs(to, [...path, to], cnt + 1);
+      visits[i] = false;
     }
   }
 
-  dfs(start, tickets, initPath);
-
-  let max = 0;
-  for (let i = 1; i < answer.length; i++) {
-    if (answer[max] > answer[i]) max = i;
-  }
-  return answer[max];
+  return ans.sort()[0];
 }
