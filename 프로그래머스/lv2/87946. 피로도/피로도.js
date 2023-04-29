@@ -1,15 +1,18 @@
 function solution(k, dungeons) {
-  let answer = 0;
-  const MINIMUM = 0;
-  const USED = 1;
-  const possibleDungeons = dungeons.slice().filter((v) => v[MINIMUM] <= k);
+  let ans = 0;
+  const N = dungeons.length;
+  const visits = Array(N).fill(false);
 
-  for (let i = 0; i < possibleDungeons.length; i++) {
-    const energy = k - possibleDungeons[i][USED];
-    const rest = possibleDungeons.filter((_, idx) => i !== idx);
-    const subAnswer = solution(energy, rest) + 1;
-    if (subAnswer > answer) answer = subAnswer;
-    if (answer === dungeons.length) return answer;
+  dfs(k, 0);
+
+  function dfs(energy, cnt) {
+    ans = Math.max(ans, cnt);
+    for (let i = 0; i < N; i++) {
+      if (energy < dungeons[i][0] || visits[i]) continue;
+      visits[i] = true;
+      dfs(energy - dungeons[i][1], cnt + 1);
+      visits[i] = false;
+    }
   }
-  return answer;
+  return ans;
 }
