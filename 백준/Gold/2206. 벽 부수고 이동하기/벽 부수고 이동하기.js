@@ -29,7 +29,8 @@ function solution() {
         if (input[nx][ny] === "0") {
           dist[nx][ny][w] = dist[cx][cy][w] + 1;
           queue.push([nx, ny, w]);
-        } else if (input[nx][ny] === "1" && w === 0) {
+        } else {
+          if(w === 1) continue;
           dist[nx][ny][1] = dist[cx][cy][0] + 1;
           queue.push([nx, ny, 1]);
         }
