@@ -7,8 +7,8 @@ function solution() {
   const n = Number(input);
   let ans = 0;
   const cols = Array.from({ length: n });
-  const inclines = Array.from({ length: n });
-  const declines = Array.from({ length: n });
+  const inclines = Array.from({ length: n * 2 });
+  const declines = Array.from({ length: n * 2 });
 
   func(0);
 
@@ -21,7 +21,7 @@ function solution() {
     }
     for (let col = 0; col < n; col++) {
       const incline = row + col;
-      const decline = col - row;
+      const decline = col - row + n - 1;
       if (cols[col]) continue;
       if (inclines[incline]) continue;
       if (declines[decline]) continue;
