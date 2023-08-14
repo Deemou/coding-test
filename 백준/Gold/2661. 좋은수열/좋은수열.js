@@ -20,23 +20,27 @@ function solution() {
     }
 
     const str = nums.join("");
-    for (let i = 1; i <= 3; i++) {
-      let flag = 1;
-      const newStr = str + i;
-      for (let len = 1; len <= Math.floor((length + 1) / 2); len++) {
-        const backIdx = length + 1 - len;
+    for (let num = 1; num <= 3; num++) {
+      let isGood = true;
+      const newStr = str + num;
+      const newLength = length + 1;
+
+      for (let len = 1; len <= Math.floor(newLength / 2); len++) {
+        const backIdx = newLength - len;
         const frontIdx = backIdx - len;
         const str1 = newStr.slice(frontIdx, backIdx);
         const str2 = newStr.slice(backIdx);
+
         if (str1 === str2) {
-          flag = 0;
+          isGood = false;
           break;
         }
       }
-      if (flag) {
-        nums.push(i);
+
+      if (isGood) {
+        nums.push(num);
         func(length + 1);
-        nums.pop(i);
+        nums.pop(num);
       }
     }
   }
