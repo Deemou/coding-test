@@ -1,26 +1,18 @@
+const dict = new Map();
+let vowel = ["A", "E", "I", "O", "U"];
+let idx = 0;
+
+function dfs(str, length) {
+  if (length > 5) return;
+
+  dict.set(str, idx++);
+  for (let i = 0; i < 5; i++) {
+    let next = str + vowel[i];
+    dfs(next, length + 1);
+  }
+}
+
 function solution(word) {
-  const vowel = ["A", "E", "I", "O", "U"];
-  const str = [];
-  const dict = [];
-
-  for (let i = 1; i <= 5; i++) {
-    dfs(i);
-  }
-
-  dict.sort();
-
-  return dict.findIndex((v) => v === word) + 1;
-
-  function dfs(limit) {
-    if (str.length === limit) {
-      dict.push(str.join(""));
-      return;
-    }
-
-    for (let i = 0; i < 5; i++) {
-      str.push(vowel[i]);
-      dfs(limit);
-      str.pop();
-    }
-  }
+  dfs("", 0);
+  return dict.get(word);
 }
