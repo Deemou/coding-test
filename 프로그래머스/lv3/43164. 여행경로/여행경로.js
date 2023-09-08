@@ -1,24 +1,25 @@
 function solution(tickets) {
-  const ans = [];
-  const N = tickets.length;
-  const visits = Array(N).fill(false);
+  const answer = [];
+  const length = tickets.length;
+  const visited = Array.from({ length: length });
 
-  dfs('ICN', ['ICN'], 0);
-
-  function dfs(start, path, cnt) {
-    if (cnt === N) {
-      ans.push(path);
+  dfs(0, "ICN", "ICN");
+  function dfs(cnt, start, path) {
+    if (cnt === length) {
+      answer.push(path.split(" "));
       return;
     }
-
-    for (let i = 0; i < N; i++) {
+    
+    for (let i = 0; i < length; i++) {
       const [from, to] = tickets[i];
-      if (from !== start || visits[i]) continue;
-      visits[i] = true;
-      dfs(to, [...path, to], cnt + 1);
-      visits[i] = false;
+      if (start !== from) continue;
+      if (visited[i]) continue;
+
+      visited[i] = true;
+      dfs(cnt + 1, to, path + " " + to);
+      visited[i] = false;
     }
   }
 
-  return ans.sort()[0];
+  return answer.sort()[0];
 }
