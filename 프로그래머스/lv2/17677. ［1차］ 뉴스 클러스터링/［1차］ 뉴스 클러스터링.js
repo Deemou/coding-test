@@ -1,51 +1,45 @@
 function solution(str1, str2) {
-  const elementsA = [];
-  const elementsB = [];
-  str1 = str1.toLowerCase();
-  str2 = str2.toLowerCase();
-
-  for (let i = 0; i < str1.length - 1; i++) {
-    if (!isValid(str1[i], str1[i + 1])) continue;
-    const slice = str1.slice(i, i + 2);
-    elementsA.push(slice);
-  }
-
-  for (let i = 0; i < str2.length - 1; i++) {
-    if (!isValid(str2[i], str2[i + 1])) continue;
-    const slice = str2.slice(i, i + 2);
-    elementsB.push(slice);
-  }
+  const elementsA = getElems(str1);
+  const elementsB = getElems(str2);
 
   if (elementsA.length === 0 && elementsB.length === 0) return 65536;
 
-  elementsA.sort();
-  elementsB.sort();
+  const set = new Set([...elementsA, ...elementsB]);
+  const mapA = getMap(elementsA);
+  const mapB = getMap(elementsB);
 
   let intersect = 0;
   let union = 0;
-  let [idxA, idxB] = [0, 0];
 
-  while (idxA !== elementsA.length && idxB !== elementsB.length) {
-    const a = elementsA[idxA];
-    const b = elementsB[idxB];
-
-    union++;
-    if (a === b) {
-      intersect++;
-      idxA++;
-      idxB++;
-    } else if (a < b) {
-      idxA++;
-    } else {
-      idxB++;
-    }
-  }
-  union += elementsA.length - idxA + elementsB.length - idxB;
-  console.log(intersect, union);
+  set.forEach((v) => {
+    const cntA = mapA.get(v) || 0;
+    const cntB = mapB.get(v) || 0;
+    intersect += Math.min(cntA, cntB);
+    union += Math.max(cntA, cntB);
+  });
 
   return Math.floor((intersect / union) * 65536);
 
-  function isValid(a, b) {
-    return a >= "a" && a <= "z" && b >= "a" && b <= "z";
+  function getElems(text) {
+    const result = [];
+
+    for (let i = 0; i < text.length - 1; i++) {
+      const elem = text.substr(i, 2);
+      if (elem.match(/[A-Za-z]{2}/)) result.push(elem.toLowerCase());
+    }
+
+    return result;
+  }
+
+  function getMap(list) {
+    const map = new Map();
+
+    for (let i = 0; i < list.length; i++) {
+      const elem = list[i];
+      const cnt = map.get(elem) || 0;
+      map.set(elem, cnt + 1);
+    }
+
+    return map;
   }
 }
