@@ -1,22 +1,14 @@
 function solution(weights) {
-    const weightCount = {};
-    for (let weight of weights) {
-        if (weight in weightCount) weightCount[weight]++;
-        else weightCount[weight] = 1;
-    }
-
-    let pairs = 0;
-    for (let w1 in weightCount) {
-        for (let w2 in weightCount) {
-            if (2 * w1 === 3 * w2 || 2 * w1 === 4 * w2 || 3 * w1 === 4 * w2) {
-                pairs += weightCount[w1] * weightCount[w2];
-            } else if(w1 === w2) {
-                for(let i=1; i<weightCount[w1]; i++) {
-                    pairs += i;
-                }
-            }
-        }
-    }
+  weights.sort((a, b) => b - a);
+  const weightCount = {};
+    
+  return weights.reduce((pairs, w) => {
+    if (weightCount[w]) pairs += weightCount[w]; // 1:1
+    if (weightCount[(3 * w) / 2]) pairs += weightCount[(3 * w) / 2]; // 2:3
+    if (weightCount[2 * w]) pairs += weightCount[2 * w]; // 2:4
+    if (weightCount[(4 * w) / 3]) pairs += weightCount[(4 * w) / 3]; // 3:4
+    weightCount[w] = (weightCount[w] || 0) + 1;
 
     return pairs;
+  }, 0);
 }
