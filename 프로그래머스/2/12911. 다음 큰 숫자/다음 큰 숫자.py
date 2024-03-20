@@ -1,8 +1,8 @@
 def solution(n):
     x = n
-    # 1. 가장 낮은 자리의 '1' 찾기
+    # 1. 가장 낮은 '1'비트 찾기
     right_one = x & -x
-    # 2. 가장 낮은 자리의 '1'에 1 더하기
+    # 2. 가장 낮은 '1'비트에 1 더하기
     added_one_bit = x + right_one
     # 3. 변경된 비트 패턴 찾기
     modified_pattern = x ^ added_one_bit
