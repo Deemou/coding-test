@@ -1,12 +1,12 @@
 function solution(n) {
-    let rest = n
-    let numberOfContiniousNumbers=1;
+    let numContNums = 1;
     let answer = 0;
-    while(rest>0){
-        if(rest%numberOfContiniousNumbers===0)
-            answer++
-        rest-=numberOfContiniousNumbers
-        numberOfContiniousNumbers++
+    
+    while(n > 0){
+        if(n % numContNums === 0) answer++
+        n -= numContNums 
+        numContNums++
     }
+    
     return answer;
 }
