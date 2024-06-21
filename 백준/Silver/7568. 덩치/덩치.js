@@ -2,10 +2,8 @@ const fs = require("fs");
 const filePath = process.platform === "linux" ? "/dev/stdin" : "./input.txt";
 const readline = require("readline");
 let line = 0;
-let stdin = [];
-const input = () => stdin[line++];
-
-readFile(filePath);
+const lines = [];
+const input = () => lines[line++];
 
 function readFile(filePath) {
   const readStream = fs.createReadStream(filePath);
@@ -14,28 +12,33 @@ function readFile(filePath) {
   });
 
   rl.on("line", (line) => {
-    stdin.push(line);
+    lines.push(line);
   }).on("close", () => {
     console.log(solution());
     process.exit();
   });
 }
 
+readFile(filePath);
+
 function solution() {
   const N = +input();
   const people = [];
-  for (let i = 0; i < N; i++) {
-    people.push(input().split(" ").map(Number));
-  }
-  const ranks = new Array(N).fill(1);
+  const ranks = [];
 
   for (let i = 0; i < N; i++) {
+    const [x, y] = input().split(" ").map(Number);
+    people.push([x, y]);
+  }
+
+  for (let i = 0; i < N; i++) {
+    let rank = 1;
+
     for (let j = 0; j < N; j++) {
-      if (i === j) continue;
-      if (people[i][0] < people[j][0] && people[i][1] < people[j][1]) {
-        ranks[i]++;
-      }
+      if (people[i][0] < people[j][0] && people[i][1] < people[j][1]) rank++;
     }
+
+    ranks.push(rank);
   }
 
   return ranks.join(" ");
