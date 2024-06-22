@@ -39,7 +39,7 @@ function solution() {
       string.push(ch);
       answer.push(string.join(""));
       string = [];
-    } else if (ch === " " && !isTag) {
+    } else if (!isTag && ch === " ") {
       answer.push(string.reverse().join("") + ch);
       string = [];
     } else {
