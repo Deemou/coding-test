@@ -23,16 +23,11 @@ readFile(filePath);
 
 function solution() {
   const N = Number(input());
-  const dp = Array.from({ length: N }, () => Array(10).fill(0));
-  for (let i = 0; i < 10; i++) {
-    dp[0][i] = 1;
-  }
+  const dp = Array.from({ length: N }, () => Array(10).fill(1));
 
   for (let i = 1; i < N; i++) {
-    for (let j = 9; j >= 0; j--) {
-      for (let k = j; k >= 0; k--) {
-        dp[i][j] = (dp[i][j] + dp[i - 1][k]) % 10007;
-      }
+    for (let j = 8; j >= 0; j--) {
+      dp[i][j] = (dp[i][j + 1] + dp[i - 1][j]) % 10007;
     }
   }
 
