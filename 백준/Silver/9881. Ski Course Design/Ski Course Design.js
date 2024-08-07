@@ -25,8 +25,22 @@ function solution() {
   const n = Number(input());
   const heights = Array.from({ length: n }, () => Number(input()));
   let minCost = Infinity;
+  const MAX_DIFF = 17;
 
-  const calculateCost = (low, high) => {
+  const minHeight = Math.min(...heights);
+  const maxHeight = Math.max(...heights);
+
+  if (maxHeight - minHeight <= MAX_DIFF) return 0;
+
+  for (let low = minHeight; low <= maxHeight - MAX_DIFF; low++) {
+    const high = low + MAX_DIFF;
+    const cost = calculateCost(low, high);
+    if (cost < minCost) minCost = cost;
+  }
+
+  return minCost;
+
+  function calculateCost(low, high) {
     let cost = 0;
     for (let height of heights) {
       if (height < low) cost += Math.pow(low - height, 2);
@@ -34,15 +48,5 @@ function solution() {
     }
 
     return cost;
-  };
-
-  for (let low = 0; low <= 100; low++) {
-    const high = low + 17;
-    const cost = calculateCost(low, high);
-    if (cost < minCost) {
-      minCost = cost;
-    }
   }
-
-  return minCost;
 }
