@@ -56,42 +56,36 @@ function solution() {
   const dx = [0, -1, -1, -1, 0, 1, 1, 1];
   const dy = [1, 1, 0, -1, -1, -1, 0, 1];
   const SHARK = 1;
+  const dist = Array.from({ length: n }, () => Array(m).fill(Infinity));
   let answer = 0;
+
+  const queue = new Queue();
 
   for (let i = 0; i < n; i++) {
     for (let j = 0; j < m; j++) {
-      if (board[i][j] === SHARK) continue;
-      const dist = bfs(i, j);
-      answer = Math.max(answer, dist);
+      if (board[i][j] !== SHARK) continue;
+      dist[i][j] = 0;
+      queue.enqueue([i, j]);
     }
   }
 
-  return answer;
+  while (!queue.isEmpty()) {
+    const [cx, cy] = queue.dequeue();
+    answer = Math.max(answer, dist[cx][cy]);
 
-  function bfs(x, y) {
-    const visited = Array.from({ length: n }, () => Array(m).fill(false));
-    const queue = new Queue();
-    let max = 1;
-    visited[x][y] = true;
-    queue.enqueue([x, y, 1]);
-
-    while (!queue.isEmpty()) {
-      const [cx, cy, dist] = queue.dequeue();
-      max = Math.max(max, dist);
-
+    for (let i = 0; i < 8; i++) {
       for (let i = 0; i < 8; i++) {
         const nx = cx + dx[i];
         const ny = cy + dy[i];
 
         if (nx < 0 || nx >= n || ny < 0 || ny >= m) continue;
-        if (visited[nx][ny]) continue;
-        if (board[nx][ny] === SHARK) return max;
+        if (dist[nx][ny] !== Infinity) continue;
 
-        visited[nx][ny] = true;
-        queue.enqueue([nx, ny, dist + 1]);
+        dist[nx][ny] = dist[cx][cy] + 1;
+        queue.enqueue([nx, ny]);
       }
     }
-
-    return max;
   }
+
+  return answer;
 }
