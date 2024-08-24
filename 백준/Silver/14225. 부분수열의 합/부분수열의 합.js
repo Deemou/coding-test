@@ -39,18 +39,18 @@ function solution() {
     if (allCombs.has(i)) continue;
     return i;
   }
+}
 
-  function getCombinations(arr, length) {
-    if (length === 1) return arr.map((v) => [v]);
+function getCombinations(arr, length) {
+  if (length === 1) return arr.map((v) => [v]);
 
-    const results = [];
-    arr.forEach((fixed, index, origin) => {
-      const rest = origin.slice(index + 1);
-      const comb = getCombinations(rest, length - 1);
-      const arranged = comb.map((v) => [fixed, ...v]);
-      results.push(...arranged);
-    });
+  const results = [];
+  arr.forEach((fixed, index, origin) => {
+    const rest = origin.slice(index + 1);
+    const comb = getCombinations(rest, length - 1);
+    const arranged = comb.map((v) => [fixed, ...v]);
+    results.push(...arranged);
+  });
 
-    return results;
-  }
+  return results;
 }
