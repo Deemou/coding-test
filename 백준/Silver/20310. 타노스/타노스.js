@@ -22,7 +22,7 @@ function readFile(filePath) {
 readFile(filePath);
 
 function solution() {
-  const str = input();
+  const str = input().split("");
   let zeroCnt = 0,
     oneCnt = 0;
 
@@ -31,5 +31,21 @@ function solution() {
     else oneCnt++;
   }
 
-  return "0".repeat(zeroCnt / 2) + "1".repeat(oneCnt / 2);
+  let cnt = 0;
+  for (let i = 0; i < str.length; i++) {
+    if (str[i] !== "1") continue;
+    str[i] = "";
+    cnt++;
+    if (cnt === oneCnt / 2) break;
+  }
+
+  cnt = 0;
+  for (let i = str.length - 1; i >= 0; i--) {
+    if (str[i] !== "0") continue;
+    str[i] = "";
+    cnt++;
+    if (cnt === zeroCnt / 2) break;
+  }
+
+  return str.join("");
 }
