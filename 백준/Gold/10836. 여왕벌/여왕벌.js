@@ -24,21 +24,24 @@ readFile(filePath);
 function solution() {
   const [M, N] = input().split(" ").map(Number);
   const sizes = Array.from({ length: M }, () => Array(M).fill(1));
+  const inits = Array(2 * M - 1).fill(0);
 
   for (let day = 0; day < N; day++) {
-    const [zero, one, two] = input().split(" ").map(Number);
-    const zeros = Array(zero).fill(0),
-      ones = Array(one).fill(1),
-      twos = Array(two).fill(2),
-      nums = [...zeros, ...ones, ...twos];
-
+    const growths = input().split(" ").map(Number);
     let cnt = 0;
-    for (let i = M - 1; i >= 0; i--) {
-      sizes[i][0] += nums[cnt++];
+    for (let i = 0; i < 3; i++) {
+      for (let j = 0; j < growths[i]; j++) {
+        inits[cnt++] += i;
+      }
     }
-    for (let i = 1; i < M; i++) {
-      sizes[0][i] += nums[cnt++];
-    }
+  }
+
+  let cnt = 0;
+  for (let i = M - 1; i >= 0; i--) {
+    sizes[i][0] += inits[cnt++];
+  }
+  for (let i = 1; i < M; i++) {
+    sizes[0][i] += inits[cnt++];
   }
 
   for (let i = 1; i < M; i++) {
