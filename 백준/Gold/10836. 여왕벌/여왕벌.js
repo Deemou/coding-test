@@ -31,25 +31,19 @@ function solution() {
       ones = Array(one).fill(1),
       twos = Array(two).fill(2),
       nums = [...zeros, ...ones, ...twos];
-    const growths = Array.from({ length: M }, () => Array(M));
 
     let cnt = 0;
     for (let i = M - 1; i >= 0; i--) {
-      growths[i][0] = nums[cnt++];
+      sizes[i][0] += nums[cnt++];
     }
     for (let i = 1; i < M; i++) {
-      growths[0][i] = nums[cnt++];
+      sizes[0][i] += nums[cnt++];
     }
-    for (let i = 1; i < M; i++) {
-      for (let j = 1; j < M; j++) {
-        growths[i][j] = growths[i - 1][j];
-      }
-    }
+  }
 
-    for (let i = 0; i < M; i++) {
-      for (let j = 0; j < M; j++) {
-        sizes[i][j] += growths[i][j];
-      }
+  for (let i = 1; i < M; i++) {
+    for (let j = 1; j < M; j++) {
+      sizes[i][j] = sizes[i - 1][j];
     }
   }
 
