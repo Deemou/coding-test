@@ -54,9 +54,9 @@ function solution(enrolls, referrals, sellers, amounts) {
     }
   }
 
-  for (let i = 0; i < enrolls.length; i++) {
-    const member = members.get(enrolls[i]);
-    result.push(member.getEarning());
+  for (const [k, v] of members) {
+    result.push(v.getEarning());
   }
+
   return result;
 }
