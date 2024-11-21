@@ -75,6 +75,3 @@ function solution(maps) {
     return -1;
   }
 }
-
-const maps = ["SOOOL", "XXXXO", "OOOOO", "OXXXX", "OOOOE"];
-console.log(solution(maps));
