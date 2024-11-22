@@ -29,21 +29,18 @@ class Queue {
 function solution(n, roads, sources, destination) {
   const answer = [];
   const graph = new Map();
-  for (let i = 0; i < roads.length; i++) {
-    const [a, b] = roads[i];
-    const aConnections = graph.get(a) || [];
-    aConnections.push(b);
-    graph.set(a, aConnections);
-    const bConnections = graph.get(b) || [];
-    bConnections.push(a);
-    graph.set(b, bConnections);
+  for (const [a, b] of roads) {
+    if (!graph.has(a)) graph.set(a, []);
+    if (!graph.has(b)) graph.set(b, []);
+    graph.get(a).push(b);
+    graph.get(b).push(a);
   }
   const distances = Array(n + 1).fill(Infinity);
   bfs();
 
-  for (let i = 0; i < sources.length; i++) {
-    const dist = distances[sources[i]];
-    answer.push(dist === Infinity ? -1 : dist);
+  for (const source of sources) {
+    const distance = distances[source];
+    answer.push(distance === Infinity ? -1 : distance);
   }
 
   return answer;
@@ -55,10 +52,9 @@ function solution(n, roads, sources, destination) {
 
     while (!queue.isEmpty()) {
       const [current, dist] = queue.dequeue();
-      const nexts = graph.get(current) || [];
+      const adjacentNodes = graph.get(current) || [];
 
-      for (let i = 0; i < nexts.length; i++) {
-        const next = nexts[i];
+      for (const next of adjacentNodes) {
         if (distances[next] <= dist + 1) continue;
         distances[next] = dist + 1;
         queue.enqueue([next, dist + 1]);
