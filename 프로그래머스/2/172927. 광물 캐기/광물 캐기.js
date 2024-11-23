@@ -89,16 +89,20 @@ function solution(picks, minerals) {
   const DIAMOND = "diamond";
   const IRON = "iron";
   const STONE = "stone";
+  const MAX_MINERALS_PER_PICK = 5;
+
   const fatigueCost = {
     diamond: [1, 1, 1],
     iron: [5, 1, 1],
     stone: [25, 5, 1],
   };
+
   const MINERAL_LIST = [DIAMOND, IRON, STONE];
-  const MAX_MINERALS_PER_PICK = 5;
+
   const REQUIRED_PICKS = Math.ceil(minerals.length / MAX_MINERALS_PER_PICK);
   const TOTAL_PICKS = picks.reduce((acc, cur) => acc + cur, 0);
   const PICKS_TO_BE_USED = Math.min(REQUIRED_PICKS, TOTAL_PICKS);
+  const remainingPicks = [...picks];
   const pq = new PriorityQueue();
   let minFatigueSum = 0;
 
@@ -106,14 +110,16 @@ function solution(picks, minerals) {
     const startIdx = i * MAX_MINERALS_PER_PICK;
     const endIdx = startIdx + MAX_MINERALS_PER_PICK;
     const mineralGroup = minerals.slice(startIdx, endIdx);
+
     const fatigueSumWithDimondPick = mineralGroup.length;
     let fatigueSumWithIronPick = 0;
     let fatigueSumWithStonePick = 0;
-    for (let j = 0; j < mineralGroup.length; j++) {
+
+    for (const mineral of mineralGroup) {
       fatigueSumWithIronPick +=
-        fatigueCost[IRON][MINERAL_LIST.indexOf(mineralGroup[j])];
+        fatigueCost[IRON][MINERAL_LIST.indexOf(mineral)];
       fatigueSumWithStonePick +=
-        fatigueCost[STONE][MINERAL_LIST.indexOf(mineralGroup[j])];
+        fatigueCost[STONE][MINERAL_LIST.indexOf(mineral)];
     }
 
     pq.enqueue(
@@ -134,15 +140,15 @@ function solution(picks, minerals) {
     ] = pq.dequeue().value;
 
     let fatigueSum = 0;
-    if (picks[0]) {
+    if (remainingPicks[0]) {
       fatigueSum = fatigueSumWithDimondPick;
-      picks[0]--;
-    } else if (picks[1]) {
+      remainingPicks[0]--;
+    } else if (remainingPicks[1]) {
       fatigueSum = fatigueSumWithIronPick;
-      picks[1]--;
+      remainingPicks[1]--;
     } else {
       fatigueSum = fatigueSumWithStonePick;
-      picks[2]--;
+      remainingPicks[2]--;
     }
 
     minFatigueSum += fatigueSum;
