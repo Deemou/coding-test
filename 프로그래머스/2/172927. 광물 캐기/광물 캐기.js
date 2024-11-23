@@ -102,7 +102,7 @@ function solution(picks, minerals) {
   const REQUIRED_PICKS = Math.ceil(minerals.length / MAX_MINERALS_PER_PICK);
   const TOTAL_PICKS = picks.reduce((acc, cur) => acc + cur, 0);
   const PICKS_TO_BE_USED = Math.min(REQUIRED_PICKS, TOTAL_PICKS);
-  const remainingPicks = [...picks];
+  let [diamondPicks, ironPicks, stonePicks] = [...picks];
   const pq = new PriorityQueue();
   let minFatigueSum = 0;
 
@@ -140,15 +140,15 @@ function solution(picks, minerals) {
     ] = pq.dequeue().value;
 
     let fatigueSum = 0;
-    if (remainingPicks[0]) {
+    if (diamondPicks) {
       fatigueSum = fatigueSumWithDimondPick;
-      remainingPicks[0]--;
-    } else if (remainingPicks[1]) {
+      diamondPicks--;
+    } else if (ironPicks) {
       fatigueSum = fatigueSumWithIronPick;
-      remainingPicks[1]--;
+      ironPicks--;
     } else {
       fatigueSum = fatigueSumWithStonePick;
-      remainingPicks[2]--;
+      stonePicks--;
     }
 
     minFatigueSum += fatigueSum;
