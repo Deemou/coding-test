@@ -16,5 +16,9 @@ function solution(n, k) {
 }
 
 function factorials(num) {
-  return num <= 1 ? 1 : num * factorials(num - 1);
+    let result = 1;
+    for (let i = 2; i <= num; i++) {
+        result *= i;
+    }
+    return result;
 }
