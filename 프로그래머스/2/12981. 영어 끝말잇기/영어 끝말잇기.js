@@ -5,9 +5,10 @@ function solution(n, words) {
   for (let i = 0; i < words.length; i++) {
     const currentWord = words[i];
     const player = (i % n) + 1;
+    const round = Math.floor(i / n) + 1;
 
     if (currentWord[0] !== lastChar || spokenWords.has(currentWord))
-      return [player, Math.floor(i / n) + 1];
+      return [player, round];
 
     spokenWords.add(currentWord);
     lastChar = currentWord.at(-1);
