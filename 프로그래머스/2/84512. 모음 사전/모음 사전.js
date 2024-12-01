@@ -1,8 +1,7 @@
 function solution(word) {
   const vowels = ["A", "E", "I", "O", "U"];
   const MAX_LENGTH = 5;
-  const VOWELS_COUNT = 5;
-  const placeValues = getPlaceValues(MAX_LENGTH, VOWELS_COUNT);
+  const placeValues = getPlaceValues(MAX_LENGTH, vowels.length);
   let answer = 0;
 
   for (let i = 0; i < word.length; i++) {
