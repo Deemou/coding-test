@@ -1,25 +1,52 @@
-function solution(cacheSize, cities) {
-  const CACHE_HIT = 1;
-  const CACHE_MISS = 5;
-  const cache = [];
-  const citySet = new Set();
+class LRUCache {
+  #CACHE_HIT = 1;
+  #CACHE_MISS = 5;
 
-  if (cacheSize === 0) return cities.length * CACHE_MISS;
+  constructor(cacheSize) {
+    this.cacheSize = cacheSize;
+    this.cache = new Map();
+  }
 
-  return cities.reduce((time, city) => {
-    city = city.toLowerCase();
-    if (citySet.has(city)) {
-      cache.splice(cache.indexOf(city), 1);
-      cache.push(city);
+  get(key) {
+    key = this.#normalizeKey(key);
 
-      return time + CACHE_HIT;
+    if (this.cache.has(key)) {
+      this.#cacheHit(key);
+      return this.#CACHE_HIT;
+    } else {
+      this.#cacheMiss(key);
+      return this.#CACHE_MISS;
     }
+  }
 
-    if (citySet.size === cacheSize) citySet.delete(cache.shift());
+  #normalizeKey(key) {
+    return key.toLowerCase();
+  }
 
-    citySet.add(city);
-    cache.push(city);
+  #cacheHit(key) {
+    const value = this.cache.get(key);
+    this.cache.delete(key);
+    this.cache.set(key, value);
+  }
 
-    return time + CACHE_MISS;
-  }, 0);
+  #cacheMiss(key) {
+    if (this.cacheSize === 0) return;
+    if (this.#isCacheFull()) this.#removeOldestKey();
+
+    this.cache.set(key, true);
+  }
+
+  #isCacheFull() {
+    return this.cache.size === this.cacheSize;
+  }
+
+  #removeOldestKey() {
+    const oldestKey = this.cache.keys().next().value;
+    this.cache.delete(oldestKey);
+  }
+}
+
+function solution(cacheSize, cities) {
+  const cache = new LRUCache(cacheSize);
+  return cities.reduce((totalTime, city) => totalTime + cache.get(city), 0);
 }
