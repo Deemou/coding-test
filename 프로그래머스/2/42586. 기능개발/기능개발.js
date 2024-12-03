@@ -3,14 +3,14 @@ function solution(progresses, speeds) {
   const requiredDays = progresses.map((progress, idx) =>
     Math.ceil((100 - progress) / speeds[idx])
   );
-  let maxDays = requiredDays[0];
+  let daysUntilNextRelease = requiredDays[0];
   let completedFeatureCount = 1;
 
   for (let i = 1; i < requiredDays.length; i++) {
-    if (requiredDays[i] <= maxDays) completedFeatureCount++;
+    if (requiredDays[i] <= daysUntilNextRelease) completedFeatureCount++;
     else {
       releaseCounts.push(completedFeatureCount);
-      maxDays = requiredDays[i];
+      daysUntilNextRelease = requiredDays[i];
       completedFeatureCount = 1;
     }
   }
