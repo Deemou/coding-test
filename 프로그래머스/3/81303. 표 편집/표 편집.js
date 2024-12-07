@@ -9,77 +9,82 @@ class Node {
 function solution(n, k, cmd) {
   const ACTIVE = "O";
   const INACTIVE = "X";
-  const UP = "U";
-  const DOWN = "D";
-  const DELETE = "C";
-  const ROLLBACK = "Z";
+  const COMMANDS = {
+    UP: "U",
+    DOWN: "D",
+    DELETE: "C",
+    ROLLBACK: "Z",
+  };
 
   const table = Array.from({ length: n }, (_, i) => new Node(i));
-  const activationTable = Array(n).fill(ACTIVE);
-  const deleted = [];
-  let currentRow = k;
+  const activationStatus = Array(n).fill(ACTIVE);
+  const deletedRowIndexes = [];
+  let currentRow = table[k];
 
-  table[0].next = table[1];
-  table[n - 1].prev = table[n - 2];
-  for (let i = 1; i < n - 1; i++) {
-    table[i].prev = table[i - 1];
-    table[i].next = table[i + 1];
+  for (let i = 0; i < n; i++) {
+    if (i > 0) table[i].prev = table[i - 1];
+    if (i < n - 1) table[i].next = table[i + 1];
   }
 
   for (let i = 0; i < cmd.length; i++) {
-    const [action, x] = cmd[i].split(" ");
+    const [command, steps] = cmd[i].split(" ");
 
-    switch (action) {
-      case UP: {
-        currentRow = findActiveRowAbove(currentRow, x);
+    switch (command) {
+      case COMMANDS.UP: {
+        currentRow = getRowAboveBySteps(currentRow, steps);
         break;
       }
-      case DOWN: {
-        currentRow = findActiveRowBelow(currentRow, x);
+      case COMMANDS.DOWN: {
+        currentRow = getRowBelowBySteps(currentRow, steps);
         break;
       }
-      case DELETE: {
-        activationTable[currentRow] = INACTIVE;
-        deleted.push(currentRow);
-
-        const row = table[currentRow];
-        if (row.prev) row.prev.next = row.next;
-        if (row.next) {
-          row.next.prev = row.prev;
-          currentRow = row.next.index;
-        } else currentRow = row.prev.index;
+      case COMMANDS.DELETE: {
+        deleteRow(currentRow);
+        currentRow = getNextRow(currentRow);
         break;
       }
-      case ROLLBACK: {
-        const lastDeleted = deleted.pop();
-        activationTable[lastDeleted] = ACTIVE;
-        const row = table[lastDeleted];
-        if (row.prev) row.prev.next = row;
-        if (row.next) row.next.prev = row;
+      case COMMANDS.ROLLBACK: {
+        rollbackRow();
         break;
       }
     }
   }
 
-  return activationTable.join("");
+  return activationStatus.join("");
 
-  function findActiveRowAbove(idx, x) {
-    let row = table[idx];
-
-    for (let i = 0; i < x; i++) {
+  function getRowAboveBySteps(row, steps) {
+    for (let i = 0; i < steps; i++) {
       row = row.prev;
     }
 
-    return row.index;
+    return row;
   }
 
-  function findActiveRowBelow(idx, x) {
-    let row = table[idx];
-
-    for (let i = 0; i < x; i++) {
+  function getRowBelowBySteps(row, steps) {
+    for (let i = 0; i < steps; i++) {
       row = row.next;
     }
 
-    return row.index;
+    return row;
+  }
+
+  function deleteRow(row) {
+    activationStatus[row.index] = INACTIVE;
+    deletedRowIndexes.push(row.index);
+
+    if (row.prev) row.prev.next = row.next;
+    if (row.next) row.next.prev = row.prev;
+  }
+
+  function getNextRow(row) {
+    return row.next ? row.next : row.prev;
+  }
+
+  function rollbackRow() {
+    const lastDeletedRow = deletedRowIndexes.pop();
+    activationStatus[lastDeletedRow] = ACTIVE;
+    const row = table[lastDeletedRow];
+    if (row.prev) row.prev.next = row;
+    if (row.next) row.next.prev = row;
   }
 }
