@@ -1,36 +1,3 @@
-function solution(N, road, K) {
-  const graph = Array.from({ length: N + 1 }, () => []);
-
-  for (const [a, b, time] of road) {
-    graph[a].push({ to: b, time });
-    graph[b].push({ to: a, time });
-  }
-
-  const distance = Array(N + 1).fill(Infinity);
-  distance[1] = 0;
-
-  const pq = new PriorityQueue();
-  pq.enqueue(1, 0);
-
-  // 다익스트라 알고리즘
-  while (!pq.isEmpty()) {
-    const { value: node, priority: cost } = pq.dequeue();
-
-    if (cost > distance[node]) continue;
-
-    for (let i = 0; i < graph[node].length; i++) {
-      const { to, time } = graph[node][i];
-      const newCost = distance[node] + time;
-      if (newCost < distance[to]) {
-        distance[to] = newCost;
-        pq.enqueue(to, newCost);
-      }
-    }
-  }
-
-  return distance.filter((d) => d <= K).length;
-}
-
 class PriorityQueue {
   constructor() {
     this.heap = [];
@@ -38,28 +5,29 @@ class PriorityQueue {
 
   enqueue(value, priority) {
     this.heap.push({ value, priority });
-    this.heapUp(this.heap.length - 1);
+    this.heapUp();
   }
 
   dequeue() {
-    if (this.heap.length === 0) return null;
-    if (this.heap.length === 1) return this.heap.pop();
+    if (this.size() === 0) return null;
+    if (this.size() === 1) return this.heap.pop();
 
     const min = this.heap[0];
     this.heap[0] = this.heap.pop();
-    this.heapDown(0);
+    this.heapDown();
 
     return min;
   }
 
   heapUp() {
     let child = this.size() - 1;
-    let parent = this.getParent(child);
 
-    while (this.heap[child] < this.heap[parent]) {
+    while (child > 0) {
+      const parent = this.getParent(child);
+      if (this.heap[child].priority >= this.heap[parent].priority) break;
+
       this.swap(child, parent);
       child = parent;
-      parent = this.getParent(child);
     }
   }
 
@@ -71,9 +39,16 @@ class PriorityQueue {
       const right = this.getRightChild(parent);
       let smallest = parent;
 
-      if (left < this.size() && this.heap[smallest] > this.heap[left])
+      if (
+        this.isValidChild(left) &&
+        this.heap[left].priority < this.heap[smallest].priority
+      )
         smallest = left;
-      if (right < this.size() && this.heap[smallest] > this.heap[right])
+
+      if (
+        this.isValidChild(right) &&
+        this.heap[right].priority < this.heap[smallest].priority
+      )
         smallest = right;
 
       if (smallest === parent) break;
@@ -83,16 +58,16 @@ class PriorityQueue {
     }
   }
 
-  size() {
-    return this.heap.length;
-  }
-
   swap(a, b) {
     [this.heap[a], this.heap[b]] = [this.heap[b], this.heap[a]];
   }
 
+  size() {
+    return this.heap.length;
+  }
+
   isEmpty() {
-    return this.heap.length === 0;
+    return this.size() === 0;
   }
 
   getParent(child) {
@@ -104,4 +79,40 @@ class PriorityQueue {
   getRightChild(parent) {
     return parent * 2 + 2;
   }
+  isValidChild(index) {
+    return index < this.size();
+  }
+}
+
+function solution(N, road, K) {
+  const graph = Array.from({ length: N + 1 }, () => []);
+
+  for (const [a, b, weight] of road) {
+    graph[a].push({ adjacentNode: b, weight });
+    graph[b].push({ adjacentNode: a, weight });
+  }
+
+  const shortestDistances = Array(N + 1).fill(Infinity);
+  shortestDistances[1] = 0;
+
+  const pq = new PriorityQueue();
+  pq.enqueue(1, 0);
+
+  // 다익스트라 알고리즘
+  while (!pq.isEmpty()) {
+    const { value: currentNode, priority: currentDistance } = pq.dequeue();
+
+    if (currentDistance > shortestDistances[currentNode]) continue;
+
+    for (let i = 0; i < graph[currentNode].length; i++) {
+      const { adjacentNode, weight } = graph[currentNode][i];
+      const newDistance = shortestDistances[currentNode] + weight;
+      if (newDistance >= shortestDistances[adjacentNode]) continue;
+
+      shortestDistances[adjacentNode] = newDistance;
+      pq.enqueue(adjacentNode, newDistance);
+    }
+  }
+
+  return shortestDistances.filter((d) => d <= K).length;
 }
