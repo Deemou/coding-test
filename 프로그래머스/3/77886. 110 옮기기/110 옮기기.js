@@ -4,7 +4,6 @@ function solution(s) {
 
 function processBinaryString(binaryString) {
   const targetPattern = "110";
-  const regex = new RegExp(targetPattern, "g");
   const stack = [];
   let targetPatternCount = 0;
 
