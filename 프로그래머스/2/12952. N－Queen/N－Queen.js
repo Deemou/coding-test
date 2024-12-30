@@ -21,11 +21,10 @@ function solution(n) {
     }
 
     for (let col = 0; col < n; col++) {
-      if (canPlace(row, col)) {
-        board[row] = col;
-        backtrack(row + 1);
-        board[row] = 0;
-      }
+      if (!canPlace(row, col)) continue;
+      board[row] = col;
+      backtrack(row + 1);
+      board[row] = 0;
     }
   }
 
