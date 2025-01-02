@@ -1,6 +1,5 @@
 function solution(n) {
   const answer = Array((n * (n + 1)) / 2).fill(0);
-  console.log(answer.length);
   let dir = 0;
   let num = 1;
   let x = -1,
