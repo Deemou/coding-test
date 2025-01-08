@@ -13,14 +13,12 @@ function solution(user_id, banned_id) {
     }
 
     for (let i = 0; i < user_id.length; i++) {
-      if (
-        !selected.includes(user_id[i]) &&
-        checkMatch(user_id[i], banned_id[depth])
-      ) {
-        selected.push(user_id[i]);
-        dfs(depth + 1);
-        selected.pop();
-      }
+      if (selected.includes(user_id[i])) continue;
+      if (!checkMatch(user_id[i], banned_id[depth])) continue;
+
+      selected.push(user_id[i]);
+      dfs(depth + 1);
+      selected.pop();
     }
   }
 
