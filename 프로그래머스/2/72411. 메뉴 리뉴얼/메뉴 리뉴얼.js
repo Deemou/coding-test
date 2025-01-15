@@ -2,7 +2,7 @@ function solution(orders, course) {
   const combinationCountsByMenuSize = new Map();
   const result = [];
 
-  for (c of course) {
+  for (const c of course) {
     combinationCountsByMenuSize.set(c, new Map());
   }
 
@@ -40,19 +40,22 @@ function solution(orders, course) {
 }
 
 function getCombinations(array, size) {
+  const subArray = [];
   const result = [];
 
-  function combine(subArray, start) {
+  function combine(start) {
     if (subArray.length === size) {
-      result.push(subArray);
+      result.push([...subArray]);
       return;
     }
 
     for (let i = start; i < array.length; i++) {
-      combine([...subArray, array[i]], i + 1);
+      subArray.push(array[i]);
+      combine(i + 1);
+      subArray.pop();
     }
   }
 
-  combine([], 0);
+  combine(0);
   return result;
 }
