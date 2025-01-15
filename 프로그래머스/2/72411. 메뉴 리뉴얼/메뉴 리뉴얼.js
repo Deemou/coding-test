@@ -39,12 +39,12 @@ function solution(orders, course) {
   return result.sort();
 }
 
-function getCombinations(array, size) {
+function getCombinations(array, length) {
   const subArray = [];
   const result = [];
 
   function combine(start) {
-    if (subArray.length === size) {
+    if (subArray.length === length) {
       result.push([...subArray]);
       return;
     }
