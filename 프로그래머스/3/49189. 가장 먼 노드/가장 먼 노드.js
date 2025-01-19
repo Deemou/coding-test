@@ -39,12 +39,12 @@ function solution(n, edge) {
 
   function bfs() {
     const queue = new Queue();
-    const dists = Array(n + 1).fill(Infinity);
+    const visited = Array(n + 1).fill(false);
     let maxDist = 0;
     let countAtMaxDist = 0;
 
     queue.enqueue([1, 0]);
-    dists[1] = 0;
+    visited[1] = true;
 
     while (!queue.isEmpty()) {
       const [node, dist] = queue.dequeue();
@@ -54,8 +54,8 @@ function solution(n, edge) {
       } else if (dist === maxDist) countAtMaxDist++;
 
       for (const nextNode of graph[node]) {
-        if (dists[nextNode] !== Infinity) continue;
-        dists[nextNode] = dist + 1;
+        if (visited[nextNode]) continue;
+        visited[nextNode] = true;
         queue.enqueue([nextNode, dist + 1]);
       }
     }
