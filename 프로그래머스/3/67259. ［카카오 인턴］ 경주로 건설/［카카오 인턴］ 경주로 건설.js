@@ -85,6 +85,9 @@ class PriorityQueue {
 }
 
 function solution(board) {
+  const ROAD_COST = 100;
+  const CONER_COST = 500;
+
   const n = board.length;
   const cost = Array.from({ length: n }, () => Array(n).fill(Infinity));
   const directions = [
@@ -109,10 +112,10 @@ function solution(board) {
       if (nx < 0 || ny < 0 || nx >= n || ny >= n) continue;
       if (board[nx][ny] === 1) continue;
 
-      let newCost = currCost + 100;
-      if (dir !== -1 && dir !== i) newCost += 500;
+      let newCost = currCost + ROAD_COST;
+      if (dir !== -1 && dir !== i) newCost += CONER_COST;
 
-      if (newCost >= cost[nx][ny] + 500) continue;
+      if (newCost >= cost[nx][ny] + CONER_COST) continue;
       cost[nx][ny] = Math.min(cost[nx][ny], newCost);
       queue.enqueue([newCost, nx, ny, i], newCost);
     }
