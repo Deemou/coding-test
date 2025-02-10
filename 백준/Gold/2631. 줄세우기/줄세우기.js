@@ -24,14 +24,30 @@ readFile(filePath);
 function solution() {
   const n = Number(input());
   const nums = Array.from({ length: n }, () => Number(input()));
-  const dp = Array(n).fill(1);
+  const lis = [nums[0]];
+
   for (let i = 1; i < n; i++) {
-    for (let j = 0; j < i; j++) {
-      if (nums[j] >= nums[i]) continue;
-      dp[i] = Math.max(dp[i], dp[j] + 1);
+    const num = nums[i];
+    if (num > lis.at(-1)) lis.push(num);
+    else {
+      const pos = binarySearch(num);
+      lis[pos] = num;
     }
   }
-  const k = Math.max(...dp);
 
-  return n - k;
+  return n - lis.length;
+
+  function binarySearch(num) {
+    let left = 0,
+      right = lis.length;
+
+    while (left < right) {
+      const mid = Math.floor((left + right) / 2);
+      if (lis[mid] < num) left = mid + 1;
+      else right = mid;
+    }
+
+    return left;
+  }
 }
+
