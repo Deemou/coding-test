@@ -24,15 +24,19 @@ readFile(filePath);
 function solution() {
   const [N, K] = input().split(" ").map(Number);
   const belt = input().split(" ").map(Number);
-  const robots = Array(2 * N).fill(false);
+  const robots = Array(N).fill(false);
   let zeroCnt = 0;
   let step = 0;
 
   while (zeroCnt < K) {
+    step++;
+
+    // 1번
     belt.unshift(belt.pop());
     robots.unshift(robots.pop());
     robots[N - 1] = false;
 
+    // 2번
     for (let i = N - 2; i >= 0; i--) {
       if (!robots[i]) continue;
       if (robots[i + 1]) continue;
@@ -46,13 +50,12 @@ function solution() {
     }
     robots[N - 1] = false;
 
+    // 3번
     if (belt[0] > 0) {
       robots[0] = true;
       belt[0]--;
       if (belt[0] === 0) zeroCnt++;
     }
-
-    step++;
   }
 
   return step;
