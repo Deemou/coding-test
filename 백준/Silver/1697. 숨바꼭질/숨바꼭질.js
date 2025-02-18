@@ -1,47 +1,75 @@
-function solution() {
-  const fs = require("fs");
-  const filePath =
-    process.platform === "linux" ? "/dev/stdin" : "./example.txt";
-  const input = fs
-    .readFileSync(filePath)
-    .toString()
-    .trim()
-    .split(" ")
-    .map(Number);
-  const [n, k] = input;
-  const limit = 100000;
-  const dist = Array.from({ length: limit + 1 });
+const fs = require("fs");
+const filePath = process.platform === "linux" ? "/dev/stdin" : "./input.txt";
+const readline = require("readline");
+let line = 0;
+const lines = [];
+const input = () => lines[line++];
 
-  return bfs();
+function readFile(filePath) {
+  const readStream = fs.createReadStream(filePath);
+  const rl = readline.createInterface({
+    input: readStream,
+  });
 
-  function bfs() {
-    const queue = [[n]];
-    dist[n] = 0;
-    let front = 0;
-    while (queue.length !== front) {
-      const [cx] = queue[front];
-      front++;
-      if (cx === k) {
-        return dist[cx];
-      }
-      const xBack = cx - 1;
-      const xNext = cx + 1;
-      const xJump = 2 * cx;
-      if (xBack >= 0 && !dist[xBack]) {
-        dist[xBack] = dist[cx] + 1;
-        queue.push([xBack]);
-      }
-      if (cx > k) continue;
-      if (xNext <= limit && !dist[xNext]) {
-        dist[xNext] = dist[cx] + 1;
-        queue.push([xNext]);
-      }
-      if (xJump <= limit && !dist[xJump]) {
-        dist[xJump] = dist[cx] + 1;
-        queue.push([xJump]);
+  rl.on("line", (line) => {
+    lines.push(line);
+  }).on("close", () => {
+    console.log(solution());
+    process.exit();
+  });
+}
+
+readFile(filePath);
+
+class Queue {
+  constructor() {
+    this.inbox = [];
+    this.outbox = [];
+  }
+
+  enqueue(data) {
+    this.inbox.push(data);
+  }
+
+  dequeue() {
+    if (!this.outbox.length) {
+      while (this.inbox.length) {
+        this.outbox.push(this.inbox.pop());
       }
     }
+
+    return this.outbox.pop();
+  }
+
+  isEmpty() {
+    return this.size() === 0;
+  }
+
+  size() {
+    return this.inbox.length + this.outbox.length;
   }
 }
 
-console.log(solution());
+function solution() {
+  const LIMIT = 100000;
+
+  const [n, k] = input().split(" ").map(Number);
+  const dist = Array(LIMIT + 1);
+  const queue = new Queue();
+  dist[n] = 0;
+  queue.enqueue(n);
+
+  while (!queue.isEmpty()) {
+    const cx = queue.dequeue();
+    if (cx === k) return dist[cx];
+
+    const nexts = [cx - 1, cx + 1, 2 * cx];
+    for (const next of nexts) {
+      if (next < 0 || next > LIMIT) continue;
+      if (dist[next]) continue;
+
+      dist[next] = dist[cx] + 1;
+      queue.enqueue(next);
+    }
+  }
+}
