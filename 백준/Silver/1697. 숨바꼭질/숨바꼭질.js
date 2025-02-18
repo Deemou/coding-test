@@ -51,9 +51,11 @@ class Queue {
 }
 
 function solution() {
+  const [n, k] = input().split(" ").map(Number);
+  if (k <= n) return n - k;
+
   const LIMIT = 100000;
 
-  const [n, k] = input().split(" ").map(Number);
   const dist = Array(LIMIT + 1);
   const queue = new Queue();
   dist[n] = 0;
