@@ -1,67 +1,93 @@
+const fs = require("fs");
+const filePath = process.platform === "linux" ? "/dev/stdin" : "./input.txt";
+const readline = require("readline");
+let line = 0;
+const lines = [];
+const input = () => lines[line++];
+
+function readFile(filePath) {
+  const readStream = fs.createReadStream(filePath);
+  const rl = readline.createInterface({
+    input: readStream,
+  });
+
+  rl.on("line", (line) => {
+    lines.push(line);
+  }).on("close", () => {
+    console.log(solution());
+    process.exit();
+  });
+}
+
+readFile(filePath);
+
 function solution() {
-  const fs = require("fs");
-  const filePath =
-    process.platform === "linux" ? "/dev/stdin" : "./example.txt";
-  const input = fs
-    .readFileSync(filePath)
-    .toString()
-    .trim()
-    .split("\n")
-    .map((v) => v.split(" ").map(Number));
-  const [n, l, r] = input[0].map(Number);
-  const visit = Array.from({ length: n }).map(() => Array.from({ length: n }));
-  const population = input.slice(1);
+  const [N, L, R] = input().split(" ").map(Number);
+  const A = Array.from({ length: N }, () => input().split(" ").map(Number));
+  const dx = [-1, 1, 0, 0];
+  const dy = [0, 0, -1, 1];
+  const visited = Array.from({ length: N }, () => Array(N).fill(false));
+  let days = 0;
 
-  const dx = [0, -1, 0, 1];
-  const dy = [1, 0, -1, 0];
+  while (true) {
+    let moved = false;
 
-  let ans = -1;
-  let cnt = 0;
-  while (cnt !== n * n) {
-    ans++;
-    visit.map((row) => row.fill(false));
-    cnt = 0;
-    for (let i = 0; i < n; i++) {
-      for (let j = 0; j < n; j++) {
-        if (visit[i][j]) continue;
-        cnt++;
-        bfs(i, j);
+    for (let i = 0; i < N; i++) {
+      visited[i].fill(false);
+    }
+
+    for (let i = 0; i < N; i++) {
+      for (let j = 0; j < N; j++) {
+        if (visited[i][j]) continue;
+        const union = [];
+        visited[i][j] = true;
+        const population = dfs(i, j, union);
+
+        if (union.length > 1) {
+          redistributePopulation(union, population);
+          moved = true;
+        }
       }
     }
+
+    if (!moved) break;
+    days++;
   }
 
-  return ans;
+  return days;
 
-  function bfs(x, y) {
-    const queue = [];
-    queue.push([x, y]);
-    visit[x][y] = true;
-    let front = 0;
-    let sum = 0;
+  function dfs(x, y, union) {
+    union.push([x, y]);
+    let population = A[x][y];
 
-    while (queue.length !== front) {
-      const [cx, cy] = queue[front];
-      front++;
-      sum += population[cx][cy];
+    for (let i = 0; i < 4; i++) {
+      const nx = x + dx[i];
+      const ny = y + dy[i];
 
-      for (let i = 0; i < 4; i++) {
-        const nx = cx + dx[i];
-        const ny = cy + dy[i];
-        if (nx < 0 || nx >= n || ny < 0 || ny >= n) continue;
-        if (visit[nx][ny]) continue;
-        const diff = Math.abs(population[cx][cy] - population[nx][ny]);
-        if (diff < l || diff > r) continue;
-        visit[nx][ny] = true;
-        queue.push([nx, ny]);
-      }
+      if (!isValidCoord(nx, ny)) continue;
+      if (visited[nx][ny]) continue;
+      if (!canUnite(x, y, nx, ny)) continue;
+
+      visited[nx][ny] = true;
+      population += dfs(nx, ny, union);
     }
 
-    const avg = Math.floor(sum / queue.length);
-    for (let i = 0; i < queue.length; i++) {
-      const [x, y] = queue[i];
-      population[x][y] = avg;
+    return population;
+  }
+
+  function isValidCoord(x, y) {
+    return x >= 0 && x < N && y >= 0 && y < N;
+  }
+
+  function canUnite(x, y, nx, ny) {
+    const diff = Math.abs(A[x][y] - A[nx][ny]);
+    return diff >= L && diff <= R;
+  }
+
+  function redistributePopulation(union, totalPopulation) {
+    const newPopulation = Math.floor(totalPopulation / union.length);
+    for (const [x, y] of union) {
+      A[x][y] = newPopulation;
     }
   }
 }
-
-console.log(solution());
