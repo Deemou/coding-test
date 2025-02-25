@@ -1,24 +1,47 @@
-let fs = require("fs");
-let input = fs.readFileSync("/dev/stdin").toString().trim().split("\n");
+const fs = require("fs");
+const filePath = process.platform === "linux" ? "/dev/stdin" : "./input.txt";
+const readline = require("readline");
+let line = 0;
+const lines = [];
+const input = () => lines[line++];
 
-const [n, k] = input.map((v) => +v);
+function readFile(filePath) {
+  const readStream = fs.createReadStream(filePath);
+  const rl = readline.createInterface({
+    input: readStream,
+  });
 
-let min = 1,
-  max = k;
-let ans = 0;
-
-while (min <= max) {
-  let mid = Math.floor((min + max) / 2);
-
-  let cnt = 0;
-  for (let i = 1; i <= n; i++) {
-    cnt += Math.min(Math.floor(mid / i), n);
-  }
-
-  if (cnt >= k) {
-    ans = mid;
-    max = mid - 1;
-  } else min = mid + 1;
+  rl.on("line", (line) => {
+    lines.push(line);
+  }).on("close", () => {
+    console.log(solution());
+    process.exit();
+  });
 }
 
-console.log(ans);
+readFile(filePath);
+
+function solution() {
+  const n = Number(input());
+  const k = Number(input());
+
+  let start = 1,
+    end = k;
+
+  while (start < end) {
+    const mid = Math.floor((start + end) / 2);
+    if (countLessOrEqual(mid) < k) start = mid + 1;
+    else end = mid;
+  }
+
+  return start;
+
+  function countLessOrEqual(x) {
+    let cnt = 0;
+    for (let i = 1; i <= n; i++) {
+      cnt += Math.min(n, Math.floor(x / i));
+    }
+
+    return cnt;
+  }
+}
